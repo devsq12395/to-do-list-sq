@@ -1,0 +1,55 @@
+.to-do {
+	background-color: #4CAF50; /* Green background color */
+	color: white; /* White text color */
+	padding: 10px 20px; /* Padding to make the button larger */
+	font-size: 16px; /* Font size */
+	border: none; /* No border */
+	border-radius: 5px; /* Rounded corners */
+	cursor: pointer; /* Cursor on hover */
+	transition: background-color 0.3s; /* Smooth transition for background color */
+
+	/* Adjust the size based on content */
+	width: auto;
+	
+	z-index: 2,
+}
+
+.to-do:hover {
+	background-color: #45a049; /* Darker green on hover */
+}
+
+.to-do-ctrl {
+	background-color: #4CAF50; /* Green background color */
+	color: white; /* White text color */
+	padding: 10px 20px; /* Padding to make the button larger */
+	font-size: 16px; /* Font size */
+	border: none; /* No border */
+	border-radius: 5px; /* Rounded corners */
+	cursor: pointer; /* Cursor on hover */
+	transition: background-color 0.3s; /* Smooth transition for background color */
+
+	/* Adjust the size based on content */
+	width: auto;
+	z-index: 2,
+}
+
+.to-do-ctrl:hover {
+	background-color: #45a049; /* Darker green on hover */
+}
+
+
+.to-do-txtbox {
+	padding: 10px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	width: 300px; /* Adjust the width as needed */
+	
+	z-index: 2,
+}
+
+.to-do-txtbox:focus {
+	outline: none;
+	border-color: #4CAF50; /* Highlight border color on focus */
+}
