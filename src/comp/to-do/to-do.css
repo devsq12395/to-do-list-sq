@@ -1,0 +1,64 @@
+.to-do {
+	background-color: #4CAF50;
+	color: white;
+	padding: 10px 20px;
+	font-size: 16px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+
+	width: auto;
+	
+	z-index: 2,
+}
+
+.to-do:hover {
+	background-color: #45a049;
+}
+
+.to-do-ctrl {
+	background-color: #4CAF50;
+	color: white;
+	padding: 10px 20px;
+	font-size: 16px;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+	transition: background-color 0.3s;
+	margin-right: 10px;
+	
+	width: auto;
+	z-index: 2,
+}
+
+.to-do-ctrl:hover {
+	background-color: #45a049;
+}
+
+
+.to-do-txtbox {
+	padding: 10px;
+	font-size: 16px;
+	border: 1px solid #ccc;
+	border-radius: 5px;
+	margin-bottom: 10px;
+	width: 700px;
+	margin-right: 10px;
+	
+	z-index: 2,
+}
+
+.to-do-txtbox:focus {
+	outline: none;
+	border-color: #4CAF50;
+}
+
+.input-container {
+	display: flex;
+	align-items: center;
+}
+
+.input-container label {
+	margin-right: 10px;
+}

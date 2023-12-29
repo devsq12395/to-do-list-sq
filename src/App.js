@@ -1,9 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 
-import ToDo from './comp/to-do.js';
-import ToDoCtrl from './comp/to-do-ctrl.js';
-import './comp/to-do.css';
+import ToDoCtrl from './comp/to-do/to-do-ctrl.js';
 
 function App() {
   return (

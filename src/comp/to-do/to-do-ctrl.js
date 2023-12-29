@@ -1,6 +1,8 @@
 import React from 'react';
 import ToDo from './to-do';
 
+import './to-do.css';
+
 class ToDoCtrl extends React.Component {
 	constructor(props) {
 		super(props);
@@ -8,6 +10,7 @@ class ToDoCtrl extends React.Component {
 		this.state = {
 			buttonCount: 0,
 			txt: '',
+			deadline: '',
 			tasks: [],
 		};
 	}
@@ -34,7 +37,8 @@ class ToDoCtrl extends React.Component {
 	};
 	
 	handleTxtBox = (event) => {
-		this.setState({ txt: event.target.value });
+		const { name, value } = event.target;
+		this.setState({ [name]: value });
 	};
 
 	createNewButton = async () => {
@@ -63,7 +67,7 @@ class ToDoCtrl extends React.Component {
 	};
 
 	render() {
-		const { buttonCount, tasks } = this.state;
+		const { buttonCount, tasks, deadline } = this.state;
 
 		const buttons = Array.from({ length: buttonCount }, (_, index) => (
 			<div key={index}>
@@ -74,17 +78,30 @@ class ToDoCtrl extends React.Component {
 
 		return (
 		<div>
-			<input
-				type="text"
-				className="to-do-txtbox"
-				value={this.state.txt}
-				onChange={this.handleTxtBox}
-				placeholder={this.props.placeholder || 'Enter text...'}
-			/>
-			<button className="to-do-ctrl" onClick={this.createNewButton}>
-				+
-			</button>
-			<br/>
+			<div className="input-container">
+				<label htmlFor="task">Task:</label>
+				<input
+					type="text"
+					className="to-do-txtbox"
+					value={this.state.txt}
+					onChange={this.handleTxtBox}
+					name="task"
+					placeholder="Enter text..."
+				/>
+				<label htmlFor="deadline">Deadline:</label>
+				<input
+					type="date"
+					className="to-do-txtbox"
+					value={this.state.deadline}
+					onChange={this.handleTxtBox}
+					name="deadline"
+					placeholder="Select deadline..."
+				/>
+				<button className="to-do-ctrl" onClick={this.createNewButton}>
+					+
+				</button>
+				<br/>
+			</div>
 			{buttons}
 		</div>
 		);
