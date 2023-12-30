@@ -10,7 +10,7 @@ class ToDoCtrl extends React.Component {
 		this.state = {
 			buttonCount: 0,
 			txt: '',
-			deadline: '',
+			date: '',
 			tasks: [],
 		};
 	}
@@ -28,7 +28,7 @@ class ToDoCtrl extends React.Component {
 
 			const data = await response.json();
 			this.setState({
-				tasks: data.map(item => item.txtData),
+				tasks: data.map(item => ({todo: item.todo, deadline: item.deadline}) ),
 				buttonCount: data.length,
 			});
 		} catch (error) {
@@ -47,7 +47,7 @@ class ToDoCtrl extends React.Component {
 	};
 
 	submitToMongoDB = async () => {
-		const { txt } = this.state;
+		const { txt, date } = this.state;
 
 		try {
 			const response = await fetch('http://localhost:5050/api/endpoint', {
@@ -55,7 +55,10 @@ class ToDoCtrl extends React.Component {
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify({ txtData: txt }), // Adjust the key to match the server model
+				body: JSON.stringify({ 
+					todo: txt,
+					deadline: date
+				}),
 			});
 
 			if (!response.ok) {
@@ -67,11 +70,11 @@ class ToDoCtrl extends React.Component {
 	};
 
 	render() {
-		const { buttonCount, tasks, deadline } = this.state;
+		const { buttonCount, tasks, date } = this.state;
 
 		const buttons = Array.from({ length: buttonCount }, (_, index) => (
 			<div key={index}>
-				<ToDo key={index}>{tasks [index]}</ToDo>
+				<ToDo key={index} todo={tasks [index].todo} deadline={tasks [index].deadline}></ToDo>
 				<br/>
 			</div>
 		));
@@ -85,16 +88,16 @@ class ToDoCtrl extends React.Component {
 					className="to-do-txtbox"
 					value={this.state.txt}
 					onChange={this.handleTxtBox}
-					name="task"
+					name="txt"
 					placeholder="Enter text..."
 				/>
 				<label htmlFor="deadline">Deadline:</label>
 				<input
 					type="date"
 					className="to-do-txtbox"
-					value={this.state.deadline}
+					value={this.state.date}
 					onChange={this.handleTxtBox}
-					name="deadline"
+					name="date"
 					placeholder="Select deadline..."
 				/>
 				<button className="to-do-ctrl" onClick={this.createNewButton}>

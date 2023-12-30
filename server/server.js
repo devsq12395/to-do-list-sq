@@ -30,17 +30,20 @@ db.once('open', () => {
 });
 
 // Define a mongoose model
-const TextData = mongoose.model('TextData', { txtData: String });
+const TodoData = mongoose.model('TodoData', { 
+	todo: String,
+	deadline: String
+});
 
 // Middleware to parse JSON requests
 app.use(express.json());
 
 // POST endpoint to receive data
 app.post('/api/endpoint', async (req, res) => {
-  const { txtData } = req.body;
+  const { todo, deadline } = req.body;
 
   try {
-    const document = new TextData({ txtData });
+    const document = new TodoData({ todo, deadline });
     await document.save();
 
     res.status(201).json({ message: 'Data saved successfully' });
@@ -52,7 +55,7 @@ app.post('/api/endpoint', async (req, res) => {
 
 app.get('/api/endpoint', async (req, res) => {
   try {
-    const data = await TextData.find();
+    const data = await TodoData.find();
     res.status(200).json(data);
   } catch (error) {
     console.error('Error fetching data from MongoDB:', error);
