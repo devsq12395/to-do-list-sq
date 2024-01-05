@@ -10,7 +10,9 @@ function App() {
 		<h1>To-Do List</h1>
 	</header>
 	<ToDoCtrl />
-	  
+	<footer className="App-footer">
+		
+	</footer>
     </div>
   );
 }

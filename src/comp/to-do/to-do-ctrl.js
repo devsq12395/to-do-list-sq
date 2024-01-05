@@ -1,14 +1,16 @@
 import React from 'react';
 import ToDo from './to-do';
+import TodoStatus from './status';
 
 import './to-do.css';
+import './status.css';
 
 class ToDoCtrl extends React.Component {
 	constructor(props) {
 		super(props);
 
 		this.state = {
-			buttonCount: 0,
+			tasksCount: 0,
 			txt: '',
 			date: '',
 			tasks: [],
@@ -29,7 +31,7 @@ class ToDoCtrl extends React.Component {
 			const data = await response.json();
 			this.setState({
 				tasks: data.map(item => ({todo: item.todo, deadline: item.deadline}) ),
-				buttonCount: data.length,
+				tasksCount: data.length,
 			});
 		} catch (error) {
 			console.error(error);
@@ -45,6 +47,18 @@ class ToDoCtrl extends React.Component {
 		await this.submitToMongoDB();
 		this.fetchDataFromMongoDB();
 	};
+	
+	getUniqueID = () => {
+		const _char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+		let _uID = '';
+
+		for (let i = 0; i < 6; i++) {
+			const _rand = Math.floor(Math.random() * _char.length);
+			_uID += _char.charAt(_rand);
+		}
+
+		return _uID;
+	};
 
 	submitToMongoDB = async () => {
 		const { txt, date } = this.state;
@@ -58,6 +72,8 @@ class ToDoCtrl extends React.Component {
 				body: JSON.stringify({ 
 					todo: txt,
 					deadline: date
+					status: '',
+					uID: this.getUniqueID ()
 				}),
 			});
 
@@ -70,12 +86,11 @@ class ToDoCtrl extends React.Component {
 	};
 
 	render() {
-		const { buttonCount, tasks, date } = this.state;
+		const { tasksCount, tasks, date } = this.state;
 
-		const buttons = Array.from({ length: buttonCount }, (_, index) => (
+		const _tasks = Array.from({ length: tasksCount }, (_, index) => (
 			<div key={index}>
 				<ToDo key={index} todo={tasks [index].todo} deadline={tasks [index].deadline}></ToDo>
-				<br/>
 			</div>
 		));
 
@@ -100,12 +115,14 @@ class ToDoCtrl extends React.Component {
 					name="date"
 					placeholder="Select deadline..."
 				/>
-				<button className="to-do-ctrl" onClick={this.createNewButton}>
+				<button className="ToDoAddBtn" onClick={this.createNewButton}>
 					+
 				</button>
 				<br/>
 			</div>
-			{buttons}
+			<br />
+			<br />
+			{_tasks}
 		</div>
 		);
 	}

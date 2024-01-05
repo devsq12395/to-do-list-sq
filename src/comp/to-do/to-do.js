@@ -1,30 +1,30 @@
+import React, { useState } from 'react';
 
+const ToDo = (props) => {
+	const [state, setState] = useState({
+		todo: props.todo,
+		deadline: props.deadline
+	});
 
-import React from 'react';
-
-class ToDo extends React.Component {
-	constructor(props) {
-		super(props);
-		
-		this.state = {
-			todo: props.todo,
-			deadline: props.deadline
-		};
-	}
-	
-	handleClick = () => {
+	const btnStatus = () => {
 		alert('Button Clicked!');
 	};
 
-	render() {
-		const { todo, deadline } = this.state;
-		
-		return (
-			<button className="to-do" onClick={this.handleClick}>
-				{todo} + ", " + {deadline}
-			</button>
-		);
-	}
-}
+	const btnDelete = () => {
+		alert('Button Clicked!');
+	};
+
+	const { todo, deadline } = state;
+
+	return (
+		<div className="Task">
+			<div className="TaskContent" onClick={(e) => e.stopPropagation()}>
+				{todo}, {deadline}
+			</div>
+			<button className="TaskBtn TaskBtnStatus">Status</button>
+			<button className="TaskBtn TaskBtnDelete">Delete</button>
+		</div>
+	);
+};
 
 export default ToDo;
