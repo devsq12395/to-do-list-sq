@@ -1,34 +1,51 @@
+import React, { useState } from 'react';
 
+const TodoStatus = (props) => {
+	const [state, setState] = useState({
+		desc: '',
+		isPopupOpen: false
+	});
 
-import React from 'react';
-
-class TodoStatus extends React.Component {
-	constructor(props) {
-		super(props);
-		
-		this.state = {
-			todo: props.todo,
-			deadline: props.deadline
-		};
-	}
+	const { isPopupOpen } = state;
 	
-	btnStatus = () => {
-		alert('Button Clicked!');
-	};
-	
-	btnDelete = () => {
-		alert('Button Clicked!');
+	handleTxtBox = (event) => {
+		const { name, value } = event.target;
+		this.setState({ [name]: value });
 	};
 
-	render() {
-		const { todo, deadline } = this.state;
-		
-		return (
-			<div className="Status">
-				
-			</div>
-		);
-	}
-}
+	const btnUpdate = () => {
+		setState((prevState) => ({ ...prevState, isPopupOpen: true }));
+	};
+	
+	const btnDelete = () => {
+		setState((prevState) => ({ ...prevState, isPopupOpen: true }));
+	};
+
+	const btnClose = () => {
+		setState((prevState) => ({ ...prevState, isPopupOpen: false }));
+	};
+
+	return (
+		<>
+			{isPopupOpen && (
+				<div className="Status">
+					<div className="StatusWin" onClick={openPopup}>
+						<input
+							type="text"
+							className="status-txtbox"
+							value={this.state.desc}
+							onChange={this.handleTxtBox}
+							name="desc"
+							placeholder="Enter text..."
+						/>
+						<button className="StatusBtn" onClick={btnUpdate}>Update</button>
+						<button className="StatusBtn" onClick={btnDelete}>Delete</button>
+						<button className="StatusBtn" onClick={btnClose}>Close</button>
+					</div>
+				</div>
+			)}
+		</>
+	);
+};
 
 export default TodoStatus;
