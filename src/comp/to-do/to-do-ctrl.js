@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { updateStatus } from '../../redux/actions';
+
 import ToDo from './to-do';
 import TodoStatus from './status';
 
@@ -14,6 +17,8 @@ class ToDoCtrl extends React.Component {
 			txt: '',
 			date: '',
 			tasks: [],
+			
+			statusOpen: false,
 		};
 	}
 	
@@ -30,7 +35,7 @@ class ToDoCtrl extends React.Component {
 
 			const data = await response.json();
 			this.setState({
-				tasks: data.map(item => ({todo: item.todo, deadline: item.deadline}) ),
+				tasks: data.map(item => ({todo: item.todo, deadline: item.deadline, status: item.status, uID: item.uID}) ),
 				tasksCount: data.length,
 			});
 		} catch (error) {
@@ -71,7 +76,7 @@ class ToDoCtrl extends React.Component {
 				},
 				body: JSON.stringify({ 
 					todo: txt,
-					deadline: date
+					deadline: date,
 					status: '',
 					uID: this.getUniqueID ()
 				}),
@@ -84,18 +89,27 @@ class ToDoCtrl extends React.Component {
 			console.error(error);
 		}
 	};
+	
+	showStatus = (_isOn) => {
+		this.setState ({statusOpen: _isOn});
+	};
 
 	render() {
-		const { tasksCount, tasks, date } = this.state;
+		const { sharedStatus } = this.props;
+		const { tasksCount, tasks, date, statusOpen } = this.state;
 
 		const _tasks = Array.from({ length: tasksCount }, (_, index) => (
 			<div key={index}>
-				<ToDo key={index} todo={tasks [index].todo} deadline={tasks [index].deadline}></ToDo>
+				<ToDo key={index} todo={tasks [index].todo} deadline={tasks [index].deadline} showStatus={this.showStatus}></ToDo>
 			</div>
 		));
-
+		
+		console.log (statusOpen);
+		
 		return (
 		<div>
+			<TodoStatus isPopupOpen={statusOpen} showStatus={this.showStatus}/>
+			
 			<div className="input-container">
 				<label htmlFor="task">Task:</label>
 				<input
@@ -128,4 +142,12 @@ class ToDoCtrl extends React.Component {
 	}
 }
 
-export default ToDoCtrl;
+const mapStateToProps = (state) => ({
+	sharedStatus: state.sharedStatus,
+});
+
+const mapDispatchToProps = {
+	updateStatus,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ToDoCtrl);

@@ -7,7 +7,7 @@ const ToDo = (props) => {
 	});
 
 	const btnStatus = () => {
-		alert('Button Clicked!');
+		props.showStatus (true);
 	};
 
 	const btnDelete = () => {
@@ -21,8 +21,8 @@ const ToDo = (props) => {
 			<div className="TaskContent" onClick={(e) => e.stopPropagation()}>
 				{todo}, {deadline}
 			</div>
-			<button className="TaskBtn TaskBtnStatus">Status</button>
-			<button className="TaskBtn TaskBtnDelete">Delete</button>
+			<button className="TaskBtn TaskBtnStatus" onClick={btnStatus}>Status</button>
+			<button className="TaskBtn TaskBtnDelete" onClick={btnDelete}>Delete</button>
 		</div>
 	);
 };

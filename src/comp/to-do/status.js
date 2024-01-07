@@ -1,40 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const TodoStatus = (props) => {
 	const [state, setState] = useState({
 		desc: '',
-		isPopupOpen: false
+		isPopupOpen: props.isPopupOpen
 	});
 
-	const { isPopupOpen } = state;
+	const { desc, isPopupOpen } = state;
 	
-	handleTxtBox = (event) => {
+	useEffect(() => {
+		setState((prevState) => ({ ...prevState, isPopupOpen: props.isPopupOpen }));
+	}, [props.isPopupOpen]);
+	
+	const handleTxtBox = (event) => {
 		const { name, value } = event.target;
-		this.setState({ [name]: value });
+		setState((prevState) => ({ ...prevState, [name]: value }));
 	};
 
 	const btnUpdate = () => {
-		setState((prevState) => ({ ...prevState, isPopupOpen: true }));
+		
 	};
 	
 	const btnDelete = () => {
-		setState((prevState) => ({ ...prevState, isPopupOpen: true }));
+		
 	};
 
 	const btnClose = () => {
-		setState((prevState) => ({ ...prevState, isPopupOpen: false }));
+		props.showStatus (false);
 	};
-
+	
 	return (
 		<>
 			{isPopupOpen && (
 				<div className="Status">
-					<div className="StatusWin" onClick={openPopup}>
+					<div className="StatusWin">
 						<input
 							type="text"
 							className="status-txtbox"
-							value={this.state.desc}
-							onChange={this.handleTxtBox}
+							value={desc}
+							onChange={handleTxtBox}
 							name="desc"
 							placeholder="Enter text..."
 						/>
