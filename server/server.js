@@ -44,7 +44,7 @@ app.post('/api/endpoint', async (req, res) => {
 	const { todo, deadline } = req.body;
 
 	try {
-		const document = new TodoData({ todo, deadline });
+		const document = new TodoData({ todo, deadline, status, uID });
 		await document.save();
 
 		res.status(201).json({ message: 'Data saved successfully' });
