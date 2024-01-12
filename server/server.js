@@ -41,7 +41,7 @@ app.use(express.json());
 
 // POST endpoint to receive data
 app.post('/api/endpoint', async (req, res) => {
-	const { todo, deadline } = req.body;
+	const { todo, deadline, status, uID } = req.body;
 
 	try {
 		const document = new TodoData({ todo, deadline, status, uID });
@@ -65,7 +65,7 @@ app.get('/api/endpoint', async (req, res) => {
 });
 
 app.delete('/api/endpoint/:id', async (req, res) => {
-    const id = req.params.id;
+    const id = req.params.uID;
 
     try {
         const deletedData = await TodoData.findByIdAndDelete(id);
@@ -79,6 +79,28 @@ app.delete('/api/endpoint/:id', async (req, res) => {
         console.error('Error deleting data from MongoDB:', error);
         res.status(500).json({ error: 'Internal Server Error', details: error.message });
     }
+});
+
+app.put('/api/endpoint/update/:uID', async (req, res) => {
+	const uID = req.params.uID;
+	const { todo, deadline, status } = req.body;
+
+	try {
+		const updatedData = await TodoData.findOneAndUpdate(
+			{ uID: uID },
+			{ todo, deadline, status },
+			{ new: true } // Return the modified document
+		);
+
+		if (updatedData) {
+			res.status(200).json({ message: 'Data updated successfully', updatedData });
+		} else {
+			res.status(404).json({ error: 'Data not found', details: 'No data with the provided uID' });
+		}
+	} catch (error) {
+		console.error('Error updating data in MongoDB:', error);
+		res.status(500).json({ error: 'Internal Server Error', details: error.message });
+	}
 });
 
 app.listen(port, () => {

@@ -19,6 +19,7 @@ class ToDoCtrl extends React.Component {
 			tasks: [],
 			
 			statusOpen: false,
+            selID: '',
 		};
 	}
 	
@@ -57,6 +58,8 @@ class ToDoCtrl extends React.Component {
 		const _char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 		let _uID = '';
 
+        
+        
 		for (let i = 0; i < 6; i++) {
 			const _rand = Math.floor(Math.random() * _char.length);
 			_uID += _char.charAt(_rand);
@@ -89,9 +92,43 @@ class ToDoCtrl extends React.Component {
 			console.error(error);
 		}
 	};
+
+    updateToMongoDB = async () => {
+		const { txt, date, selID } = this.state;
+        const { sharedStatus } = this.props;
+
+		try {
+            const updatedTasks = this.state.tasks.map((task) => {
+                if (task.uID === selID) {
+                    return {
+                        ...task,
+                        status: sharedStatus,
+                    };
+                }
+                return task;
+            });
+			
+			const response = await fetch(`http://localhost:5050/api/endpoint/update/${selID}`, {
+				method: 'PUT',
+				headers: {
+					'Content-Type': 'application/json',
+				},
+				body: JSON.stringify(updatedTasks [0]),
+			});
+
+			if (!response.ok) {
+				throw new Error('Failed to update data to MongoDB');
+			}
+			
+			const responseData = await response.json();
+			console.log(responseData);
+		} catch (error) {
+			console.error(error);
+		}
+	};
 	
-	showStatus = (_isOn) => {
-		this.setState ({statusOpen: _isOn});
+	showStatus = (_isOn, _id) => {
+		this.setState ({statusOpen: _isOn, selID: _id});
 	};
 
 	render() {
@@ -100,15 +137,19 @@ class ToDoCtrl extends React.Component {
 
 		const _tasks = Array.from({ length: tasksCount }, (_, index) => (
 			<div key={index}>
-				<ToDo key={index} todo={tasks [index].todo} deadline={tasks [index].deadline} showStatus={this.showStatus}></ToDo>
+				<ToDo 
+                    key={index} 
+                    todo={tasks [index].todo} 
+                    uID={tasks [index].uID} 
+                    deadline={tasks [index].deadline} 
+                    showStatus={this.showStatus} 
+            ></ToDo>
 			</div>
 		));
 		
-		console.log (statusOpen);
-		
 		return (
 		<div>
-			<TodoStatus isPopupOpen={statusOpen} showStatus={this.showStatus}/>
+			<TodoStatus isPopupOpen={statusOpen} showStatus={this.showStatus} updateToMongoDB={this.updateToMongoDB}/>
 			
 			<div className="input-container">
 				<label htmlFor="task">Task:</label>

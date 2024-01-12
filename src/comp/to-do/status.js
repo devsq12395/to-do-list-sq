@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { connect } from 'react-redux';
+import { updateStatus } from '../../redux/actions';
 
 const TodoStatus = (props) => {
 	const [state, setState] = useState({
@@ -17,8 +19,9 @@ const TodoStatus = (props) => {
 		setState((prevState) => ({ ...prevState, [name]: value }));
 	};
 
-	const btnUpdate = () => {
-		
+	const btnUpdate = async () => {
+		await props.updateStatus(state.desc);
+        props.updateToMongoDB();
 	};
 	
 	const btnDelete = () => {
@@ -26,7 +29,8 @@ const TodoStatus = (props) => {
 	};
 
 	const btnClose = () => {
-		props.showStatus (false);
+		props.updateStatus(state.desc);
+		props.showStatus(false);
 	};
 	
 	return (
@@ -52,4 +56,12 @@ const TodoStatus = (props) => {
 	);
 };
 
-export default TodoStatus;
+const mapStateToProps = (state) => ({
+    sharedStatus: state.sharedStatus,
+});
+
+const mapDispatchToProps = {
+	updateStatus,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(TodoStatus);
