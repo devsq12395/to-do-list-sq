@@ -119,9 +119,6 @@ class ToDoCtrl extends React.Component {
 			if (!response.ok) {
 				throw new Error('Failed to update data to MongoDB');
 			}
-			
-			const responseData = await response.json();
-			console.log(responseData);
 		} catch (error) {
 			console.error(error);
 		}
