@@ -128,6 +128,10 @@ class ToDoCtrl extends React.Component {
 		this.setState ({statusOpen: _isOn, selID: _id});
 	};
 
+    getStatusData = (_id) => {
+        return tasks[_id];
+    }
+
 	render() {
 		const { sharedStatus } = this.props;
 		const { tasksCount, tasks, date, statusOpen } = this.state;
@@ -146,7 +150,12 @@ class ToDoCtrl extends React.Component {
 		
 		return (
 		<div>
-			<TodoStatus isPopupOpen={statusOpen} showStatus={this.showStatus} updateToMongoDB={this.updateToMongoDB}/>
+			<TodoStatus 
+                isPopupOpen={statusOpen} 
+                showStatus={this.showStatus} 
+                updateToMongoDB={this.updateToMongoDB} 
+                getStatusData={this.getStatusData}
+            />
 			
 			<div className="input-container">
 				<label htmlFor="task">Task:</label>

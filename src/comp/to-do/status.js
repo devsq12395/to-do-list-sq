@@ -38,7 +38,8 @@ const TodoStatus = (props) => {
 			{isPopupOpen && (
 				<div className="Status">
 					<div className="StatusWin">
-						<input
+                        <p>Status:</p>
+						<textarea
 							type="text"
 							className="status-txtbox"
 							value={desc}
@@ -46,9 +47,11 @@ const TodoStatus = (props) => {
 							name="desc"
 							placeholder="Enter text..."
 						/>
-						<button className="StatusBtn" onClick={btnUpdate}>Update</button>
-						<button className="StatusBtn" onClick={btnDelete}>Delete</button>
-						<button className="StatusBtn" onClick={btnClose}>Close</button>
+                        <div className="StatusWin-btns">
+                            <button className="StatusBtn" onClick={btnUpdate}>Update</button>
+                            <button className="StatusBtn" onClick={btnDelete}>Delete</button>
+                            <button className="StatusBtn" onClick={btnClose}>Close</button>
+                        </div>
 					</div>
 				</div>
 			)}
