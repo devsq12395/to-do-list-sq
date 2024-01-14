@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { connect } from 'react-redux';
-import { updateStatus } from '../../redux/actions';
+import { updateSelTask } from '../../redux/actions';
 
 const TodoStatus = (props) => {
 	const [state, setState] = useState({
@@ -18,9 +18,17 @@ const TodoStatus = (props) => {
 		const { name, value } = event.target;
 		setState((prevState) => ({ ...prevState, [name]: value }));
 	};
+    
+    const startUpdateSelTask = async () => {
+        const updatedSelTask = {
+            ...props.sharedSelTask,
+            status: desc
+        };
+        await props.updateSelTask(updatedSelTask);
+    };
 
 	const btnUpdate = async () => {
-		await props.updateStatus(state.desc);
+		await startUpdateSelTask();
         props.updateToMongoDB();
 	};
 	
@@ -28,8 +36,10 @@ const TodoStatus = (props) => {
 		
 	};
 
-	const btnClose = () => {
-		props.updateStatus(state.desc);
+	const btnClose = async () => {
+        // TO DO: Need to add "Updating..." here
+        
+		await startUpdateSelTask();
 		props.showStatus(false);
 	};
 	
@@ -42,7 +52,7 @@ const TodoStatus = (props) => {
 						<textarea
 							type="text"
 							className="status-txtbox"
-							value={desc}
+							value={desc=='' ? props.sharedSelTask.status : desc}
 							onChange={handleTxtBox}
 							name="desc"
 							placeholder="Enter text..."
@@ -60,11 +70,11 @@ const TodoStatus = (props) => {
 };
 
 const mapStateToProps = (state) => ({
-    sharedStatus: state.sharedStatus,
+    sharedSelTask: state.sharedSelTask,
 });
 
 const mapDispatchToProps = {
-	updateStatus,
+	updateSelTask,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(TodoStatus);

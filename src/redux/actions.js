@@ -1,6 +1,6 @@
 
 
-export const updateStatus = (newStatus) => ({
-	type: 'UPDATE_STATUS', 
-	payload: newStatus
+export const updateSelTask = (newTask) => ({
+	type: 'UPDATE_SEL_TASK', 
+	payload: newTask
 });

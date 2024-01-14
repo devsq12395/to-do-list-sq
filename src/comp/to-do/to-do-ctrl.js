@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { updateStatus } from '../../redux/actions';
+import { updateSelTask } from '../../redux/actions';
 
 import ToDo from './to-do';
 import TodoStatus from './status';
@@ -57,8 +57,6 @@ class ToDoCtrl extends React.Component {
 	getUniqueID = () => {
 		const _char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
 		let _uID = '';
-
-        
         
 		for (let i = 0; i < 6; i++) {
 			const _rand = Math.floor(Math.random() * _char.length);
@@ -95,25 +93,15 @@ class ToDoCtrl extends React.Component {
 
     updateToMongoDB = async () => {
 		const { txt, date, selID } = this.state;
-        const { sharedStatus } = this.props;
-
+        const { sharedSelTask } = this.props;
+        
 		try {
-            const updatedTasks = this.state.tasks.map((task) => {
-                if (task.uID === selID) {
-                    return {
-                        ...task,
-                        status: sharedStatus,
-                    };
-                }
-                return task;
-            });
-			
 			const response = await fetch(`http://localhost:5050/api/endpoint/update/${selID}`, {
 				method: 'PUT',
 				headers: {
 					'Content-Type': 'application/json',
 				},
-				body: JSON.stringify(updatedTasks [0]),
+				body: JSON.stringify(sharedSelTask),
 			});
 
 			if (!response.ok) {
@@ -124,16 +112,25 @@ class ToDoCtrl extends React.Component {
 		}
 	};
 	
-	showStatus = (_isOn, _id) => {
-		this.setState ({statusOpen: _isOn, selID: _id});
+	showStatus = async (_isOn, _id) => {
+        // TO DO: Add "updating..." here
+        const { tasks } = this.state;
+        const { sharedSelTask, updateSelTask } = this.props;
+        
+        if (_isOn) {
+            const _task = tasks.find(task => task.uID === _id);
+            
+            if (_task) {
+                await updateSelTask({..._task});
+                this.setState ({statusOpen: _isOn, selID: _id});
+            }
+        } else {
+            this.setState ({statusOpen: false});
+        }
 	};
 
-    getStatusData = (_id) => {
-        return tasks[_id];
-    }
-
 	render() {
-		const { sharedStatus } = this.props;
+		const { sharedSelTask } = this.props;
 		const { tasksCount, tasks, date, statusOpen } = this.state;
 
 		const _tasks = Array.from({ length: tasksCount }, (_, index) => (
@@ -144,7 +141,7 @@ class ToDoCtrl extends React.Component {
                     uID={tasks [index].uID} 
                     deadline={tasks [index].deadline} 
                     showStatus={this.showStatus} 
-            ></ToDo>
+                ></ToDo>
 			</div>
 		));
 		
@@ -154,7 +151,6 @@ class ToDoCtrl extends React.Component {
                 isPopupOpen={statusOpen} 
                 showStatus={this.showStatus} 
                 updateToMongoDB={this.updateToMongoDB} 
-                getStatusData={this.getStatusData}
             />
 			
 			<div className="input-container">
@@ -190,11 +186,11 @@ class ToDoCtrl extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
-	sharedStatus: state.sharedStatus,
+	sharedSelTask: state.sharedSelTask,
 });
 
 const mapDispatchToProps = {
-	updateStatus,
+	updateSelTask,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ToDoCtrl);

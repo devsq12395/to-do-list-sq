@@ -1,10 +1,10 @@
-const statusUpdater = (state = { sharedStatus: '' }, action) => {
+const selTaskUpdater = (state = { sharedSelTask: {} }, action) => {
 	switch (action.type) {
-		case 'UPDATE_STATUS':
-			return { sharedStatus: action.payload };
+		case 'UPDATE_SEL_TASK':
+			return { sharedSelTask: action.payload };
 		default:
 			return state;
 	}
 };
 
-export default statusUpdater;
+export default selTaskUpdater;

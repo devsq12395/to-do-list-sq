@@ -1,7 +1,7 @@
 
 import { createStore } from 'redux';
-import statusUpdater from './updater';
+import selTaskUpdater from './updater';
 
-const store = createStore(statusUpdater);
+const store = createStore(selTaskUpdater);
 
 export default store;
