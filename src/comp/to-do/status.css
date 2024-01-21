@@ -26,6 +26,11 @@
     color: black;
 }
 
+.StatusWin h1 {
+	margin-top: 0px;
+	margin-bottom: 0px;
+}
+
 .StatusWin p {
     font-size: 20px;
     margin-bottom: 0px;

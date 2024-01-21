@@ -48,6 +48,7 @@ const TodoStatus = (props) => {
 			{isPopupOpen && (
 				<div className="Status">
 					<div className="StatusWin">
+						<h1>{props.sharedSelTask.todo}</h1>
                         <p>Status:</p>
 						<textarea
 							type="text"
